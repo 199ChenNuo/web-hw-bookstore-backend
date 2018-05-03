@@ -5,14 +5,14 @@
         
 <hibernate-mapping package="ebook">
 
-    <class name="User" table="usr">
-        <id name="id" column="id">
+    <class name="User" table="user">
+        <id name="id" column="userID">
             <generator class="native"/>
         </id>
-        <property name="name" />
-        <property name="password" />        
-        <property name="phone"/>
-        <property name="email"/>        
+        <property name="name" column="userName"/>
+        <property name="password" column="userPassword"/>        
+        <property name="phone" column="userPhone"/>
+        <property name="email" column="userEmail"/>        
     </class>  
  
     <!--   

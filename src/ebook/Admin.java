@@ -1,7 +1,7 @@
 package ebook;
 
-public class User {
-	private int id;
+public class Admin {
+    private int id;
 
     private String name;
     private String password;
@@ -49,5 +49,4 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 }
