@@ -36,7 +36,7 @@ public class CheckAdminServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-            String adminname = request.getParameter("username");
+            String adminname = request.getParameter("adminname");
             HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
             
             response.setContentType("text/html;charset=utf-8");
@@ -51,12 +51,14 @@ public class CheckAdminServlet extends HttpServlet {
                     .getCurrentSession().createQuery("from Admin").list(); 
             Iterator<Admin> it = result.iterator();
             
+            System.out.println("adminname "+adminname);
             while (it.hasNext()) {
                 Admin admin = (Admin) it.next();
                 String name = admin.getName();
                 if(name.equals(adminname)){
-                    System.out.println("find admin, name: ");
+                    System.out.println("find admin, name: "+name);
                     rst = admin.getPassword();
+                    break;
                 }
             }
             

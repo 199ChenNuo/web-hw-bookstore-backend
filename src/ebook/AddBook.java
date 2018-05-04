@@ -68,6 +68,7 @@ public class AddBook extends HttpServlet {
         
         
         PrintWriter out = response.getWriter();
+        System.out.println(content);
         out.println(buildJson());        
     
     
@@ -213,6 +214,11 @@ public class AddBook extends HttpServlet {
 	        	Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 				
 	        	session.beginTransaction();
+	        	
+	        	response.setContentType("text/html;charset=utf-8");
+	            /* cross  origin */
+	            response.setHeader("Access-Control-Allow-Origin","*");
+	            
 	        	// Write HTML header
 	        	 System.out.println("-----1----");
 	        	 

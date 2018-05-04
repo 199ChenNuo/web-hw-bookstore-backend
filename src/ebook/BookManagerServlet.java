@@ -73,38 +73,7 @@ public class BookManagerServlet extends HttpServlet {
             response.getWriter().write(books);
 
             System.out.println(books);
-         /*  
-HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
-            PrintWriter out = response.getWriter();
-            response.setContentType("text/html;charset=utf-8");
-            
-            System.out.println("This is a book manager");
 
-            List<Book> result = HibernateUtil.getSessionFactory()
-                    .getCurrentSession().createQuery("from Book").list(); 
-            Iterator<Book> it = result.iterator();
-            
-            ArrayList<JSONArray> booksJson = new ArrayList<JSONArray>();
-            while (it.hasNext()) {
-                Book book = (Book) it.next();
-                ArrayList<String> arrayList = new ArrayList<String>();
-                arrayList.add(book.getTitle());
-                arrayList.add(book.getAuthor());
-                arrayList.add(book.getLanguage());
-                arrayList.add(book.getPublished());
-                arrayList.add(book.getSales());                             
-                booksJson.add(JSONArray.fromObject(arrayList));
-            }
-            JSONArray books = JSONArray.fromArray(booksJson.toArray());
-
-
-            System.out.println(books);
-
-           out.println(books);
-           out.flush();
-           out.close();
-           HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().commit();
-           */
            HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().commit();
         }
         catch (Exception ex) {
