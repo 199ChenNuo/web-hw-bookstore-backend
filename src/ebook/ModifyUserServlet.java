@@ -1,27 +1,8 @@
 package ebook;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
-
-
-import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
-import java.util.Map;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonString;
-import javax.json.JsonStructure;
-import javax.json.JsonValue;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,25 +12,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 
 import ebook.HibernateUtil;
-import ebook.Book;
+import ebook.User;
 
-@WebServlet("/ModifyBooks")
-public class ModifyBooksServlet extends HttpServlet {
+@WebServlet("/ModifyUser")
+public class ModifyUserServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-	
-	//List<DOMTreeRow> rowList;sa
-    JsonStructure parsed;
-       
+	  
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ModifyBooksServlet() {
+    public ModifyUserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    
+
     @SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -66,33 +44,31 @@ public class ModifyBooksServlet extends HttpServlet {
             System.out.println("ID"+sID);
             Long ID = Long.valueOf(sID).longValue();
             String name = request.getParameter("name");
-            String author = request.getParameter("author");
-            String price = request.getParameter("price");
-            String year = request.getParameter("year");
-            String storage = request.getParameter("storage");
+            String password = request.getParameter("password");
+            String phone = request.getParameter("phone");
+            String email = request.getParameter("email");
             
-            List<Book> result = HibernateUtil.getSessionFactory()
-                    .getCurrentSession().createQuery("from Book").list(); 
-            Iterator<Book> it = result.iterator();
+            List<User> result = HibernateUtil.getSessionFactory()
+                    .getCurrentSession().createQuery("from User").list(); 
+            Iterator<User> it = result.iterator();
             
-            Book book = new Book();
+            User user = new User();
             
             while (it.hasNext()) {
-            	book = (Book) it.next();
-            	Long bID = book.getId();
-            	if(bID==ID) {
-            		book.setName(name);
-                    book.setAuthor(author);
-                    book.setPrice(price);
-                    book.setStorage(storage);
-                    book.setYear(year);
+            	user = (User) it.next();
+            	int uID = user.getId();
+            	if(uID==ID) {
+            		user.setName(name);
+            		user.setEmail(email);
+            		user.setPassword(password);
+            		user.setPhone(phone);
                     break;
             	}
             }        
             
             System.out.println("complete");
             
-            session.save(book);
+            session.save(user);
 	        session.getTransaction().commit();
         }
         catch (Exception ex) {

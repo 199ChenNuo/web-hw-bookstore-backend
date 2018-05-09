@@ -19,13 +19,13 @@ import net.sf.json.JSONArray;
  * Servlet implementation class UserManagerServlet
  */
 @WebServlet("/BookManager")
-public class BookManagerServlet extends HttpServlet {
+public class CheckBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public BookManagerServlet() {
+	public CheckBookServlet() {
 		super();
 	}
 

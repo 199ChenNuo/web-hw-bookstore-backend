@@ -15,15 +15,5 @@
         <property name="email" column="userEmail"/>        
     </class>  
  
-    <!--   
-    <class name="User" table="tbl_user">
-        <id name="id" column="id">
-            <generator class="native"/>
-        </id>
-        <property name="firstname" column="username"/>
-        <property name="lastname" column="role"/>
-        <property name="phone" column="password"/>
-        <property name="email"/>        
-    </class>
- 	-->  
+ 
 </hibernate-mapping>

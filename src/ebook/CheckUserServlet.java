@@ -39,7 +39,7 @@ public class CheckUserServlet extends HttpServlet  {
             
             System.out.println("checking an user");
 
-            String rst="";
+            String rst="{user:[";
             
             List<User> result = HibernateUtil.getSessionFactory()
                     .getCurrentSession().createQuery("from User").list(); 
@@ -50,13 +50,27 @@ public class CheckUserServlet extends HttpServlet  {
             	User user = (User) it.next();
             	String Name = user.getName();
                 if(Name.equals(username)) {
-                	rst=user.getPassword();
+                	rst += "{ID:";
+                	int uID = user.getId();
+                	rst += uID;
+                	rst += ",name:\"";
+                	rst += user.getName();
+                	rst += "\",password:\"";
+                	rst += user.getPassword();
+                	rst += "\",phone:\"";
+                	rst += user.getPhone();
+                	rst += "\",email:\"";
+                	rst += user.getEmail();
+                	rst += "\"}]}";
                 }
-            }            
+            }      
+            
             System.out.println("check ends");
+            System.out.println(rst);
 
             response.getWriter().write(rst);
             HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().commit();
+            HibernateUtil.getSessionFactory().getCurrentSession().close();
         }
         catch (Exception ex) {
             HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
