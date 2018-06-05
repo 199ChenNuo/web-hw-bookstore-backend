@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="restbs.rest.bookstore.entity">
+
+    <class name="Books" table="books">
+        <id name="id" column="id">
+            <generator class="native" />
+        </id>
+        <property name="name" column="name"/>
+        <property name="author" column="Author"/>
+        <property name="price" column="Price"/>
+        <property name="year" column="Year"/>
+        <property name="storage" column="Storage"/>
+    </class>
+
+
+</hibernate-mapping>
