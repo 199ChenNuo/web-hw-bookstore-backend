@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hw-java-bookstore.iml" filepath="$PROJECT_DIR$/.idea/hw-java-bookstore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hw-java-bookstoreBackend-master/hw-java-bookstoreBackend.iml" filepath="$PROJECT_DIR$/hw-java-bookstoreBackend-master/hw-java-bookstoreBackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bookstore-backend/bookstore-backend.iml" filepath="$PROJECT_DIR$/bookstore-backend/bookstore-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/web-hw-bs-backend.iml" filepath="$PROJECT_DIR$/.idea/web-hw-bs-backend.iml" />
     </modules>
   </component>
 </project>
