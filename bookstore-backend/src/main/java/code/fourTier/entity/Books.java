@@ -15,7 +15,7 @@ public class Books {
     private String author;
     private String price;
     private String year;
-    private String storage;
+    private int storage;
 
 
     public Books() {}
@@ -59,11 +59,11 @@ public class Books {
         this.price = price;
     }
 
-    public String getStorage() {
+    public int getStorage() {
         return storage;
     }
 
-    public void setStorage(String storage) {
+    public void setStorage(int storage) {
         this.storage = storage;
     }
 }

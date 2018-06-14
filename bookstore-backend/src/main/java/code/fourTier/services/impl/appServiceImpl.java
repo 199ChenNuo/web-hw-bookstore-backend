@@ -1,10 +1,13 @@
 package code.fourTier.services.impl;
 
 import code.fourTier.dao.BookDao;
+import code.fourTier.dao.OrderFormDao;
 import code.fourTier.dao.UserDao;
 import code.fourTier.entity.Admin;
 import code.fourTier.entity.Books;
+import code.fourTier.entity.OrderForm;
 import code.fourTier.entity.User;
+import com.sun.deploy.panel.ITreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import code.fourTier.dao.AdminDao;
@@ -22,6 +25,9 @@ public class appServiceImpl implements appService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    OrderFormDao orderFormDao;
 
     @SuppressWarnings("unchecked")
     public String GetAllBooks(){
@@ -57,7 +63,7 @@ public class appServiceImpl implements appService {
         return books;
     }
 
-    public void AddBook(String name, String author, String price, String year, String storage){
+    public void AddBook(String name, String author, String price, String year, int storage){
         Books book = new Books();
         book.setName(name);
         book.setAuthor(author);
@@ -68,7 +74,7 @@ public class appServiceImpl implements appService {
         System.out.println("add a book");
     }
 
-    public String ModifyBook(Long id, String name, String author, String price, String year, String storage){
+    public String ModifyBook(Long id, String name, String author, String price, String year, int storage){
         Iterable<Books> books = bookDao.findById(id);
         Iterator<Books> it = books.iterator();
         if(it.hasNext()){
@@ -164,5 +170,55 @@ public class appServiceImpl implements appService {
         }else{
             return "修改失败";
         }
+    }
+
+    public String AddOrder(int userId, Long bookId, int amount, double price){
+
+        Iterable<Books> books = bookDao.findById(bookId);
+        Iterator<Books> it = books.iterator();
+        if(it.hasNext()){
+            OrderForm orderForm = new OrderForm(userId, bookId, amount, price);
+            orderFormDao.save(orderForm);
+            Books book = (Books) it.next();
+            book.setStorage(book.getStorage() - amount);
+            bookDao.save(book);
+            return "购买成功";
+        }else{
+            return "购买失败";
+        }
+    }
+
+    public String PrevOrder(int userId){
+        Iterable<OrderForm> orders = orderFormDao.findByUserid(userId);
+        Iterator<OrderForm> it = orders.iterator();
+        String rst="{[";
+        while(it.hasNext()){
+            OrderForm orderForm = (OrderForm) it.next();
+            rst += "{ID:\"";
+            String orderid =  String.valueOf(orderForm.getId());
+            rst += orderid;
+
+            Iterable<Books> books = bookDao.findById(orderForm.getBookid());
+            Iterator<Books> bit = books.iterator();
+            if(bit.hasNext()){
+                Books book = bit.next();
+                String bookname = book.getName();
+                String bookauthor = book.getAuthor();
+                String bookyear = book.getYear();
+                rst += "\",name:\"";
+                rst += bookname;
+                rst += "\",author:\"";
+                rst += bookauthor;
+                rst += "\",year:\"";
+                rst += bookyear;
+            }
+            rst += "\",price:\"";
+            rst += orderForm.getPrice();
+            rst += "\",count:\"";
+            rst += orderForm.getAmount();
+            rst += "\"},";
+        }
+        rst += "]}";
+        return rst;
     }
 }

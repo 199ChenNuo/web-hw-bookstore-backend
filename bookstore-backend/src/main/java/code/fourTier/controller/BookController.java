@@ -17,13 +17,13 @@ public class BookController {
 
     @RequestMapping(value = "/AddBook",method = RequestMethod.GET)
     public
-    void AddBook(@RequestParam String name, @RequestParam String author, @RequestParam String price, @RequestParam String  year, @RequestParam String storage){
+    void AddBook(@RequestParam String name, @RequestParam String author, @RequestParam String price, @RequestParam String  year, @RequestParam int storage){
         this.appservice.AddBook(name, author, price, year, storage);
     }
 
     @RequestMapping(value = "/ModifyBooks",method = RequestMethod.GET)
     public
-    void ModifyBook(@RequestParam Long ID, @RequestParam String name, @RequestParam String author, @RequestParam String price, @RequestParam String  year, @RequestParam String storage){
+    void ModifyBook(@RequestParam Long ID, @RequestParam String name, @RequestParam String author, @RequestParam String price, @RequestParam String  year, @RequestParam int storage){
         this.appservice.ModifyBook(ID, name, author, price, year, storage);
     }
 
