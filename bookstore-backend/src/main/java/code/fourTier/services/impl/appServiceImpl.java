@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import code.fourTier.dao.AdminDao;
 import code.fourTier.services.appService;
 
+import java.sql.Date;
 import java.util.Iterator;
 
 @Service
@@ -54,6 +55,8 @@ public class appServiceImpl implements appService {
             books += (book.getYear());
             books += ("\",storage:\"");
             books += (book.getStorage());
+            books += ("\",category:\"");
+            books += book.getCategory();
             books += ("\"},");
             System.out.println("one book complete");
         }
@@ -63,18 +66,19 @@ public class appServiceImpl implements appService {
         return books;
     }
 
-    public void AddBook(String name, String author, String price, String year, int storage){
+    public void AddBook(String name, String author, String price, String year, int storage, String category){
         Books book = new Books();
         book.setName(name);
         book.setAuthor(author);
         book.setPrice(price);
         book.setYear(year);
         book.setStorage(storage);
+        book.setCategory(category);
         bookDao.save(book);
         System.out.println("add a book");
     }
 
-    public String ModifyBook(Long id, String name, String author, String price, String year, int storage){
+    public String ModifyBook(Long id, String name, String author, String price, String year, int storage, String category){
         Iterable<Books> books = bookDao.findById(id);
         Iterator<Books> it = books.iterator();
         if(it.hasNext()){
@@ -84,6 +88,7 @@ public class appServiceImpl implements appService {
             book.setPrice(price);
             book.setYear(year);
             book.setStorage(storage);
+            book.setCategory(category);
             bookDao.save(book);
             return "修改成功";
         }else{
@@ -172,12 +177,42 @@ public class appServiceImpl implements appService {
         }
     }
 
+    public String GetAllUsers(){
+        Iterable<User> userlist = userDao.findAll();
+
+        String users = new String();
+        users = "{[";
+        Iterator<User> it = userlist.iterator();
+        System.out.println("get all users info");
+
+        while (it.hasNext()) {
+            User user = (User) it.next();
+            users += "{ID:";
+            users += user.getId();
+            users += ",name:\"";
+            users += user.getName();
+            users += "\",password:\"";
+            users += user.getPassword();
+            users += "\",phone:\"";
+            users += user.getPhone();
+            users += "\",email:\"";
+            users += user.getEmail();
+            users += "\"},";
+
+            System.out.println("one user complete");
+        }
+        users += "]}";
+        return users;
+    }
+
     public String AddOrder(int userId, Long bookId, int amount, double price){
 
         Iterable<Books> books = bookDao.findById(bookId);
         Iterator<Books> it = books.iterator();
         if(it.hasNext()){
-            OrderForm orderForm = new OrderForm(userId, bookId, amount, price);
+            long time = System.currentTimeMillis();
+            java.sql.Date date = new java.sql.Date(time);
+            OrderForm orderForm = new OrderForm(userId, bookId, amount, price, date);
             orderFormDao.save(orderForm);
             Books book = (Books) it.next();
             book.setStorage(book.getStorage() - amount);
@@ -216,6 +251,110 @@ public class appServiceImpl implements appService {
             rst += orderForm.getPrice();
             rst += "\",count:\"";
             rst += orderForm.getAmount();
+            rst += "\",date:\"";
+            rst += orderForm.getDate();
+            rst += "\"},";
+        }
+        rst += "]}";
+        return rst;
+    }
+
+    public String PrevOrderByDate(int userId, Date beginDate, Date endDate){
+        Iterable<OrderForm> orders = orderFormDao.findByUserid(userId);
+        Iterator<OrderForm> it = orders.iterator();
+        String rst="{[";
+        while(it.hasNext()){
+            OrderForm orderForm = (OrderForm) it.next();
+            if(orderForm.getDate().after(beginDate) && orderForm.getDate().before(endDate)){
+                rst += "{ID:\"";
+                String orderid =  String.valueOf(orderForm.getId());
+                rst += orderid;
+
+                Iterable<Books> books = bookDao.findById(orderForm.getBookid());
+                Iterator<Books> bit = books.iterator();
+                if(bit.hasNext()){
+                    Books book = bit.next();
+                    String bookname = book.getName();
+                    String bookauthor = book.getAuthor();
+                    String bookyear = book.getYear();
+                    rst += "\",author:\"";
+                    rst += bookauthor;
+                    rst += "\",name:\"";
+                    rst += bookname;
+                    rst += "\",year:\"";
+                    rst += bookyear;
+                }
+                rst += "\",price:\"";
+                rst += orderForm.getPrice();
+                rst += "\",count:\"";
+                rst += orderForm.getAmount();
+                rst += "\",date:\"";
+                rst += orderForm.getDate();
+                rst += "\"},";
+            }
+        }
+        rst += "]}";
+        return rst;
+    }
+
+    public String GetAllOrdersByDate(Date beginDate, Date endDate){
+        Iterable<OrderForm> orders = orderFormDao.findAll();
+        Iterator<OrderForm> it = orders.iterator();
+        String rst="{[";
+        while(it.hasNext()){
+            OrderForm orderForm = (OrderForm) it.next();
+            if(orderForm.getDate().after(beginDate) && orderForm.getDate().before(endDate)){
+                rst += "{ID:\"";
+                String orderid =  String.valueOf(orderForm.getId());
+                rst += orderid;
+                Iterable<Books> books = bookDao.findById(orderForm.getBookid());
+                Iterator<Books> bit = books.iterator();
+                if(bit.hasNext()){
+                    Books book = bit.next();
+                    rst += "\",year:\"";
+                    rst += book.getYear();
+                    rst += "\",name:\"";
+                    rst += book.getName();
+                    rst += "\",author:\"";
+                    rst += book.getAuthor();
+                }
+                Iterable<User> users = userDao.findById(orderForm.getUserid());
+                Iterator<User> uit = users.iterator();
+                if(uit.hasNext()){
+                    User user = (User) uit.next();
+                    rst += "\",username:\"";
+                    rst += user.getName();
+                }
+                rst += "\",price:\"";
+                rst += orderForm.getPrice();
+                rst += "\",count:\"";
+                rst += orderForm.getAmount();
+                rst += "\",date:\"";
+                rst += orderForm.getDate();
+                rst += "\"},";
+            }
+        }
+        rst += "]}";
+        return rst;
+    }
+
+    public String GetAllOrders(){
+        Iterable<OrderForm> orders = orderFormDao.findAll();
+        Iterator<OrderForm> it = orders.iterator();
+        String rst="{[";
+        while(it.hasNext()){
+            OrderForm orderForm = (OrderForm) it.next();
+            rst += "{OrderID:\"";
+            String orderid =  String.valueOf(orderForm.getId());
+            rst += orderid;
+            rst += "\",UserID:\"";
+            rst += orderForm.getUserid();
+            rst += "\",price:\"";
+            rst += orderForm.getPrice();
+            rst += "\",count:\"";
+            rst += orderForm.getAmount();
+            rst += "\",date:\"";
+            rst += orderForm.getDate();
             rst += "\"},";
         }
         rst += "]}";

@@ -18,4 +18,6 @@ public class AdminController {
     String AdminLogin(@RequestParam String adminname, HttpServletResponse httpServletResponse) {
         return this.appservice.AdminLogin(adminname);
     }
+
+
 }

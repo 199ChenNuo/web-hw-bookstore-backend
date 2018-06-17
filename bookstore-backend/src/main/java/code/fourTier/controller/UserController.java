@@ -34,4 +34,9 @@ public class UserController {
         return appservice.ModifyUser(id, name, password, phone, email);
     }
 
+    @RequestMapping(value="/AllUsers",method = RequestMethod.GET)
+    public
+    String AllUsers(){
+        return this.appservice.GetAllUsers();
+    }
 }

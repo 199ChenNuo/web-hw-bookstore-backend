@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Date;
 
 @Entity
 public class OrderForm {
@@ -15,14 +16,16 @@ public class OrderForm {
     private Long bookid;
     private int amount;
     private double price;
+    private Date date;
 
     public OrderForm(){};
 
-    public OrderForm(int userId, Long bookId, int amount, double price){
+    public OrderForm(int userId, Long bookId, int amount, double price, Date date){
         this.userid = userId;
         this.bookid = bookId;
         this.amount = amount;
         this.price = price;
+        this.date = date;
     }
 
     public int getId(){
@@ -64,4 +67,8 @@ public class OrderForm {
     public void setPrice(double price){
         this.price = price;
     }
+
+    public Date getDate(){ return date; }
+
+    public void setDate(Date date){ this.date = date; }
 }
